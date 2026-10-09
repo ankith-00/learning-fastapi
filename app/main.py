@@ -80,11 +80,40 @@ user_info = {"roll_no": '40', "address": address}
 
 user_info1 = UserAddressInfo(**user_info)
 
-def print_user_address(user_info):
-    print(user_info.address.city)
+# def print_user_address(user_info):
+#     print(user_info.address.city)
 
 
-print_user_address(user_info1)
+# print_user_address(user_info1)
+
+
+
+
+
+
+# - - - - - - - - - - - - - - - turning models into 'dict'
+# user_dict =  user_info1.model_dump(include=["roll_no"])
+user_dict =  user_info1.model_dump(exclude={"address": ["landmark"]})
+print(user_dict)
+
+
+user_json = user_info1.model_dump_json()
+# print(user_json)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
