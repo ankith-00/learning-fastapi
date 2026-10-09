@@ -1,7 +1,5 @@
 ## How to setup FastPAI project using uv
 
-#### Step - 1 :
-
 1. Create a Folder ---> Navigate to it
 2. Run `uv init`
 3. Run `uv add fastapi --extra standard`
