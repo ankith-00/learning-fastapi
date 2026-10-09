@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import List, Dict, Optional
+from pydantic import BaseModel, EmailStr, AnyUrl, Field, field_validator
+from typing import List, Dict, Optional, Annotated
 
 app = FastAPI()
 
@@ -15,15 +15,29 @@ app = FastAPI()
 # - - - - - - - - - - - - - - - creating pydantic modal using 'List' & 'Dict' from typing
 class Student(BaseModel):
     roll_no: int
-    name: str
-    active: bool
+    name: str = Annotated[str, Field(max_length=30, title="Name should be within 50 chars")]
+    active: Annotated[bool, Field(default=None, description="This represents students addmission status")]
     subjects: List[str]
     marks: Dict[str, float]
-    phone_no: Optional[int] = None       # Defining Optional requires 'default' 'None'            
+    phone_no: Optional[int] = None     # defining Optional requires 'default' 'None' 
+    email: EmailStr                
+    dp_image_url:AnyUrl  
+    age: int = Field(gt=15, lt=25) 
+
+
+    @field_validator("email")          # custome field validator using field_validator decorator
+    @classmethod
+    def validate_email(class_instance, email_value):
+        valid_domains = ["google.com", "sarvam.com"]   
+        domain_name = email_value.split("@")[-1]
+        if domain_name not in valid_domains:
+            raise ValueError("Invalid Email")
+        return email_value
 
 
 
-student_info = {"roll_no":2 ,'name': "Ravi", "active": True, "subjects":["Math", "English"], "marks": {"English": 45.6}}
+
+student_info = {"roll_no":2 ,'name': "Ravi", "active": True, "subjects":["Math", "English"], "marks": {"English": 45.6}, "email":"abc@sarvam.com", "dp_image_url": "http://www.ankith.dev/image.png", "age": 16}
 
 student1 = Student(**student_info)
 
@@ -31,9 +45,6 @@ def print_student_data(student: Student):
     print("Students details : {",student, "}")
 
 print_student_data(student1)
-
-
-
 
 
 
