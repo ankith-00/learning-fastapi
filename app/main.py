@@ -1,5 +1,7 @@
 from fastapi import FastAPI
-from pydantic import BaseModel, EmailStr, AnyUrl, Field, field_validator, model_validator
+
+from pydantic import BaseModel, EmailStr, AnyUrl, Field, field_validator, model_validator, computed_field
+
 from typing import List, Dict, Optional, Annotated
 
 app = FastAPI()
@@ -43,18 +45,46 @@ class Student(BaseModel):
 
 
 
-student_info = {"roll_no":2 ,'name': "Ravi", "active": True, "subjects":["Math", "English"], "marks": {"English": 45.6, "Math": 11}, "email":"abc@sarvam.com", "dp_image_url": "http://www.ankith.dev/image.png", "age": 16}
+# student_info = {"roll_no":2 ,'name': "Ravi", "active": True, "subjects":["Math", "English"], "marks": {"English": 45.6, "Math": 11}, "email":"abc@sarvam.com", "dp_image_url": "http://www.ankith.dev/image.png", "age": 16}
 
-student1 = Student(**student_info)
+# student1 = Student(**student_info)
 
-def print_student_data(student: Student):
-    print("Students details : {",student, "}")
+# def print_student_data(student: Student):
+#     print("Students details : {",student, "}")
 
-print_student_data(student1)
-
-
+# print_student_data(student1)
 
 
+
+
+
+# - - - - - - - - - - - - - - - Nested Model
+class Address(BaseModel):
+    flat_no: int
+    road_name: str
+    landmark: str
+    city: str
+    pin_code: int
+
+
+class UserAddressInfo(BaseModel):
+    roll_no: int
+    address: Address
+
+
+address = {"flat_no": 102, "road_name": "Bannerughatta main road", "landmark": "Circle", "city": "Bengaluru", "pin_code": 560083, }
+
+address = Address(**address)
+
+user_info = {"roll_no": '40', "address": address}
+
+user_info1 = UserAddressInfo(**user_info)
+
+def print_user_address(user_info):
+    print(user_info.address.city)
+
+
+print_user_address(user_info1)
 
 
 
