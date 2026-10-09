@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from pydantic import BaseModel, EmailStr, AnyUrl, Field, field_validator
+from pydantic import BaseModel, EmailStr, AnyUrl, Field, field_validator, model_validator
 from typing import List, Dict, Optional, Annotated
 
 app = FastAPI()
@@ -35,9 +35,15 @@ class Student(BaseModel):
         return email_value
 
 
+    @model_validator(mode="after")
+    def validate_marks(self):
+        if self.marks.get("Math", 0) < 10:
+            raise ValueError("Math marks cannot be less then 10")
+        return self
 
 
-student_info = {"roll_no":2 ,'name': "Ravi", "active": True, "subjects":["Math", "English"], "marks": {"English": 45.6}, "email":"abc@sarvam.com", "dp_image_url": "http://www.ankith.dev/image.png", "age": 16}
+
+student_info = {"roll_no":2 ,'name': "Ravi", "active": True, "subjects":["Math", "English"], "marks": {"English": 45.6, "Math": 11}, "email":"abc@sarvam.com", "dp_image_url": "http://www.ankith.dev/image.png", "age": 16}
 
 student1 = Student(**student_info)
 
