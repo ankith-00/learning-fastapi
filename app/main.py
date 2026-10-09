@@ -1,8 +1,25 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
+class User(BaseModel):
+    id:int
+    name:str
+    email:str
 
-@app.get('/')
+
+user_data = [
+    {
+        "id": 1,
+        "name": "Rajeev",
+        "age": 20,
+        "email": "rajeev@gmail.com",
+        "city": "Bengaluru"
+    }
+]
+
+
+@app.get('/', response_model=User)
 def root():
-    return {"message":"Hello World !"}
+    return user_data[0]
